@@ -43,15 +43,18 @@ import {
   useBreakpoint,
 } from "@chakra-ui/react";
 import { StarIcon, EmailIcon, ChevronLeftIcon } from "@chakra-ui/icons";
+var sdk;
+var paymentHub;
 
 const App = () => {
-  let sdk;
-  let paymentHub;
   const [network, setNetwork] = useControllableState({ defaultValue: "👽" });
   const [privateKey, setPrivateKey] = useControllableState({
     defaultValue: "👽",
   });
-  const [step2, setStep2] = useState(true);
+  const [hubAddress, setHubAddress] = useControllableState({
+    defaultValue: "👽",
+  });
+  const [step2, setStep2] = useState(false);
   async function connect() {
     if (!MetaMaskWalletProvider.detect()) {
       console.log("MetaMask not detected");
@@ -68,13 +71,21 @@ const App = () => {
         truncateEthAddress(state$._value.account.address)
     );
     console.info("SDK created", state$);
+    console.log(NetworkNames.Mumbai);
   }
 
   async function createWallet() {
     const privateKey = randomPrivateKey();
     setPrivateKey(privateKey);
-    paymentHub = new Sdk(privateKey, {});
+    paymentHub = new Sdk(privateKey, {
+      networkName: sdk.state$._value.network.name,
+    });
     setStep2(false);
+    console.log(paymentHub.state$);
+  }
+
+  async function createHub() {
+    setHubAddress(paymentHub.state$._value.account.address);
   }
 
   return (
@@ -164,6 +175,7 @@ const App = () => {
                 >
                   Create Wallet
                 </Button>
+                <Heading>Private Key:</Heading>
                 <Tag
                   size="md"
                   variant="subtle"
@@ -173,20 +185,23 @@ const App = () => {
                 >
                   {privateKey}
                 </Tag>
-                <Alert variant="left-accent" status="success">
-                  <AlertIcon />
-                  <AlertTitle mr={1}>Warning!</AlertTitle>
-                  <AlertDescription>Copy private key</AlertDescription>
-                </Alert>
               </Stack>
               <Stack spacing={2}>
                 <Text color="gray.600">
                   Attention! Your funds can not be restored if private key lost.
                   Make sure the private key is saved.
                 </Text>
+                <Alert variant="left-accent" status="success">
+                  <AlertIcon />
+                  <AlertTitle mr={1}>Alert!</AlertTitle>
+                  <AlertDescription>Copy private key</AlertDescription>
+                </Alert>
               </Stack>
             </Stack>
-            <Checkbox onChange={(e) => setStep2(e.target.checked)}>
+            <Checkbox
+              isChecked={step2}
+              onChange={(e) => setStep2(e.target.checked)}
+            >
               I have saved my private key. Proceed to step 2.
             </Checkbox>
           </Box>
@@ -217,7 +232,7 @@ const App = () => {
                   fontWeight="bold"
                   fontFamily="heading"
                 >
-                  B
+                  Create/Access Hub
                 </Heading>
               </Flex>
               <Stack ml={4} spacing={2} mt={4} mr={4}>
@@ -226,6 +241,14 @@ const App = () => {
                   alignItems="flex-start"
                   spacing={2}
                 >
+                  <Button
+                    onClick={async () => {
+                      await createHub();
+                    }}
+                  >
+                    Create Hub
+                  </Button>
+                  <Heading>Payment Hub Address:</Heading>
                   <Tag
                     size="md"
                     variant="subtle"
@@ -233,39 +256,17 @@ const App = () => {
                     borderRadius="sm"
                     fontSize="sm"
                   >
-                    Drag and Drop!
+                    {hubAddress}
                   </Tag>
                   <Text fontSize="md" color="gray.600">
-                    Drag any component from the left hand panel into this
-                    editor. Then start interacting with them: try to drop the
-                    Avatar component in this box…
+                    Hub is used to distribute tokens among recipients.
                   </Text>
-                  <Box
-                    width="200px"
-                    display="block"
-                    flexDirection="column"
-                    alignItems="flex-start"
-                    justifyContent="flex-start"
-                    backgroundColor="gray.100"
-                    borderRadius="lg"
-                    p={3}
-                    minHeight="60px"
-                  />
+                  <Alert variant="left-accent" status="success">
+                    <AlertIcon />
+                    <AlertTitle mr={1}>Alert!</AlertTitle>
+                    <AlertDescription>Copy hub P2P address</AlertDescription>
+                  </Alert>
                 </Stack>
-                <Stack spacing={2}>
-                  <Tag size="md" variant="subtle" colorScheme="whatsapp">
-                    Preset
-                  </Tag>
-                  <Text color="gray.600">
-                    A preset is a group of components (like Alert). Just drop a
-                    preset to easily setup a complexe component like this:
-                  </Text>
-                </Stack>
-                <Alert variant="left-accent" status="success">
-                  <AlertIcon />
-                  <AlertTitle mr={1}>Alert!</AlertTitle>
-                  <AlertDescription>I'm an Alert preset</AlertDescription>
-                </Alert>
               </Stack>
             </Box>
           </Stack>
