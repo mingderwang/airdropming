@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import truncateEthAddress from "truncate-eth-address";
 import {
   Sdk,
@@ -16,6 +16,7 @@ import {
   useBoolean,
   ChakraProvider,
   Box,
+  Checkbox,
   Button,
   Image,
   Badge,
@@ -50,7 +51,7 @@ const App = () => {
   const [privateKey, setPrivateKey] = useControllableState({
     defaultValue: "👽",
   });
-  const [step2, setStep2] = useBoolean();
+  const [step2, setStep2] = useState(true);
   async function connect() {
     if (!MetaMaskWalletProvider.detect()) {
       console.log("MetaMask not detected");
@@ -73,8 +74,7 @@ const App = () => {
     const privateKey = randomPrivateKey();
     setPrivateKey(privateKey);
     paymentHub = new Sdk(privateKey, {});
-
-    console.log("payment hub", output);
+    setStep2(false);
   }
 
   return (
@@ -186,6 +186,9 @@ const App = () => {
                 </Text>
               </Stack>
             </Stack>
+            <Checkbox onChange={(e) => setStep2(e.target.checked)}>
+              I have saved my private key. Proceed to step 2.
+            </Checkbox>
           </Box>
         </Stack>
         {step2 && (
