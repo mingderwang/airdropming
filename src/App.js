@@ -55,6 +55,7 @@ const App = () => {
     defaultValue: "👽",
   });
   const [step2, setStep2] = useState(false);
+  const [step3, setStep3] = useState(false);
   async function connect() {
     if (!MetaMaskWalletProvider.detect()) {
       console.log("MetaMask not detected");
@@ -271,83 +272,85 @@ const App = () => {
             </Box>
           </Stack>
         )}
-        <Stack>
-          <Box
-            backgroundColor="white"
-            boxShadow="sm"
-            borderRadius="lg"
-            pl={3}
-            pr={3}
-            pt={5}
-            pb={5}
-          >
-            <Flex
-              display="flex"
-              flexDirection="row"
-              alignItems="center"
-              justifyContent="flex-start"
-              pb={2}
+        {step3 && (
+          <Stack>
+            <Box
+              backgroundColor="white"
+              boxShadow="sm"
+              borderRadius="lg"
+              pl={3}
+              pr={3}
+              pt={5}
+              pb={5}
             >
-              <ChevronLeftIcon />
-              <Heading
-                size="md"
-                as="h2"
-                lineHeight="shorter"
-                fontWeight="bold"
-                fontFamily="heading"
-              >
-                C area
-              </Heading>
-            </Flex>
-            <Stack ml={4} spacing={2} mt={4} mr={4}>
-              <Stack
+              <Flex
+                display="flex"
+                flexDirection="row"
+                alignItems="center"
                 justifyContent="flex-start"
-                alignItems="flex-start"
-                spacing={2}
+                pb={2}
               >
-                <Tag
+                <ChevronLeftIcon />
+                <Heading
                   size="md"
-                  variant="subtle"
-                  colorScheme="whatsapp"
-                  borderRadius="sm"
-                  fontSize="sm"
+                  as="h2"
+                  lineHeight="shorter"
+                  fontWeight="bold"
+                  fontFamily="heading"
                 >
-                  Drag and Drop!
-                </Tag>
-                <Text fontSize="md" color="gray.600">
-                  Drag any component from the left hand panel into this editor.
-                  Then start interacting with them: try to drop the Avatar
-                  component in this box…
-                </Text>
-                <Box
-                  width="200px"
-                  display="block"
-                  flexDirection="column"
-                  alignItems="flex-start"
+                  Under developerment.
+                </Heading>
+              </Flex>
+              <Stack ml={4} spacing={2} mt={4} mr={4}>
+                <Stack
                   justifyContent="flex-start"
-                  backgroundColor="gray.100"
-                  borderRadius="lg"
-                  p={3}
-                  minHeight="60px"
-                />
+                  alignItems="flex-start"
+                  spacing={2}
+                >
+                  <Tag
+                    size="md"
+                    variant="subtle"
+                    colorScheme="whatsapp"
+                    borderRadius="sm"
+                    fontSize="sm"
+                  >
+                    Drag and Drop!
+                  </Tag>
+                  <Text fontSize="md" color="gray.600">
+                    Drag any component from the left hand panel into this
+                    editor. Then start interacting with them: try to drop the
+                    Avatar component in this box…
+                  </Text>
+                  <Box
+                    width="200px"
+                    display="block"
+                    flexDirection="column"
+                    alignItems="flex-start"
+                    justifyContent="flex-start"
+                    backgroundColor="gray.100"
+                    borderRadius="lg"
+                    p={3}
+                    minHeight="60px"
+                  />
+                </Stack>
+                <Stack spacing={2}>
+                  <Tag size="md" variant="subtle" colorScheme="whatsapp">
+                    Preset
+                  </Tag>
+                  <Text color="gray.600">
+                    A preset is a group of components (like Alert). Just drop a
+                    preset to easily setup a complexe component like this:
+                  </Text>
+                </Stack>
+                <Alert variant="left-accent" status="success">
+                  <AlertIcon />
+                  <AlertTitle mr={1}>Alert!</AlertTitle>
+                  <AlertDescription>I'm an Alert preset</AlertDescription>
+                </Alert>
               </Stack>
-              <Stack spacing={2}>
-                <Tag size="md" variant="subtle" colorScheme="whatsapp">
-                  Preset
-                </Tag>
-                <Text color="gray.600">
-                  A preset is a group of components (like Alert). Just drop a
-                  preset to easily setup a complexe component like this:
-                </Text>
-              </Stack>
-              <Alert variant="left-accent" status="success">
-                <AlertIcon />
-                <AlertTitle mr={1}>Alert!</AlertTitle>
-                <AlertDescription>I'm an Alert preset</AlertDescription>
-              </Alert>
-            </Stack>
-          </Box>
-        </Stack>
+            </Box>
+          </Stack>
+        )}
       </Grid>
     </ChakraProvider>
   );
