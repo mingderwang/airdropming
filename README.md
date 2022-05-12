@@ -1611,7 +1611,7 @@ Open your `package.json` and add a `homepage` field:
 
 Create React App uses the `homepage` field to determine the root URL in the built HTML file.
 
-#### Step 2: Install `gh-pages` and add `deploy` to `scripts` in `package.json`
+#### : Install `gh-pages` and add `deploy` to `scripts` in `package.json`
 
 Now, whenever you run `npm run build`, you will see a cheat sheet with instructions on how to deploy to GitHub Pages.
 

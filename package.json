@@ -1,9 +1,16 @@
 {
   "homepage": "./",
   "name": "react",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": null,
-  "keywords": [],
+  "keywords": [
+    "etherspot",
+    "airdrop",
+    "ming",
+    "erc20", 
+    "token",
+    "ethereum"
+  ],
   "main": "src/index.js",
   "dependencies": {
     "@chakra-ui/icons": "^1.0.9",

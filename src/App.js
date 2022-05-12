@@ -89,6 +89,10 @@ const App = () => {
     setHubAddress(paymentHub.state$._value.account.address);
   }
 
+  async function createClaimTx() {
+    console.log("claimTx...");
+  }
+
   return (
     <ChakraProvider resetCSS>
       <Flex
@@ -203,7 +207,7 @@ const App = () => {
               isChecked={step2}
               onChange={(e) => setStep2(e.target.checked)}
             >
-              I have saved my private key. Proceed to step 2.
+              I have saved my private key. Proceed to next step.
             </Checkbox>
           </Box>
         </Stack>
@@ -335,18 +339,19 @@ const App = () => {
                 </Stack>
                 <Stack spacing={2}>
                   <Tag size="md" variant="subtle" colorScheme="whatsapp">
-                    Preset
+                    Make sure you have enough funds in the Payment Hub address.
                   </Tag>
                   <Text color="gray.600">
-                    A preset is a group of components (like Alert). Just drop a
-                    preset to easily setup a complexe component like this:
+                    then, provide an client address to claim 1 tokens.
                   </Text>
                 </Stack>
-                <Alert variant="left-accent" status="success">
-                  <AlertIcon />
-                  <AlertTitle mr={1}>Alert!</AlertTitle>
-                  <AlertDescription>I'm an Alert preset</AlertDescription>
-                </Alert>
+                <Button
+                  onClick={async () => {
+                    await createClaimTx();
+                  }}
+                >
+                  Claim
+                </Button>
               </Stack>
             </Box>
           </Stack>
