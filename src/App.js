@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import UploadCSV from "./components/uploadCSV";
 import truncateEthAddress from "truncate-eth-address";
 import {
   Sdk,
@@ -92,7 +93,12 @@ const App = () => {
   }
 
   async function createClaimTx() {
-    console.log("claimTx...");
+    console.log("starting ...");
+    setStep4(true);
+  }
+
+  async function createSend() {
+    console.log("sending ...");
   }
 
   return (
@@ -205,12 +211,14 @@ const App = () => {
                 </Alert>
               </Stack>
             </Stack>
-            <Checkbox
-              isChecked={step2}
-              onChange={(e) => setStep2(e.target.checked)}
-            >
-              I have saved my private key. Proceed to next step.
-            </Checkbox>
+            {privateKey !== "👽" && (
+              <Checkbox
+                isChecked={step2}
+                onChange={(e) => setStep2(e.target.checked)}
+              >
+                I have saved my private key. Proceed to next step.
+              </Checkbox>
+            )}
           </Box>
         </Stack>
         {step2 && (
@@ -278,12 +286,14 @@ const App = () => {
                   </Alert>
                 </Stack>
               </Stack>
-              <Checkbox
-                isChecked={step3}
-                onChange={(e) => setStep3(e.target.checked)}
-              >
-                I have copyed the hub P2P address. Proceed to next step.
-              </Checkbox>
+              {hubAddress !== "👽" && (
+                <Checkbox
+                  isChecked={step3}
+                  onChange={(e) => setStep3(e.target.checked)}
+                >
+                  I have copied the hub P2P address. Proceed to next step.
+                </Checkbox>
+              )}
             </Box>
           </Stack>
         )}
@@ -313,7 +323,7 @@ const App = () => {
                   fontWeight="bold"
                   fontFamily="heading"
                 >
-                  Select recipients.
+                  Select Recipients.
                 </Heading>
               </Flex>
               <Stack ml={4} spacing={2} mt={4} mr={4}>
@@ -329,13 +339,16 @@ const App = () => {
                     borderRadius="sm"
                     fontSize="sm"
                   >
-                    Upload CSV
+                    Prepare a list of recipients and amount of given tokens in a
+                    CVS file to upload.
                   </Tag>
                   <Text fontSize="md" color="gray.600">
-                    Example 500 addresses max in a .csv file
+                    For example, 3 addresses in a .csv file as bellow. Where
+                    there are a recipient address and amount of given tokens per
+                    line, with a comma as a delimiter.
                   </Text>
                   <Box
-                    width="200px"
+                    width="500px"
                     display="block"
                     flexDirection="column"
                     alignItems="flex-start"
@@ -344,22 +357,98 @@ const App = () => {
                     borderRadius="lg"
                     p={3}
                     minHeight="60px"
-                  />
+                  >
+                    0x8626f6940e2eb28930efb4cef49b2d1f2c9c1199, 1
+                    0xdd2fd4581271e230360230f9337d5c0430bf44c0, 50
+                    0xbda5747bfd65f08deb54cb465eb87d40e51b197e, 1000
+                  </Box>
                 </Stack>
                 <Stack spacing={2}>
-                  <Tag size="md" variant="subtle" colorScheme="whatsapp">
-                    Make sure you have enough funds in the Payment Hub address.
-                  </Tag>
+                  <Alert variant="left-accent" status="success">
+                    <AlertIcon />
+                    <AlertTitle mr={1}>Alert!</AlertTitle>
+                    <AlertDescription>
+                      Make sure you have enough funds in the Payment Hub
+                      address.
+                    </AlertDescription>
+                  </Alert>
                   <Text color="gray.600">
-                    then, provide an client address to claim 1 tokens.
+                    Choose your .cvs file, and then press the Upload Start
+                    button.
                   </Text>
+                </Stack>
+              </Stack>
+              <UploadCSV />
+            </Box>
+          </Stack>
+        )}
+        {step3 && (
+          <Stack>
+            <Box
+              backgroundColor="white"
+              boxShadow="sm"
+              borderRadius="lg"
+              pl={3}
+              pr={3}
+              pt={5}
+              pb={5}
+            >
+              <Flex
+                display="flex"
+                flexDirection="row"
+                alignItems="center"
+                justifyContent="flex-start"
+                pb={2}
+              >
+                <ChevronLeftIcon />
+                <Heading
+                  size="md"
+                  as="h2"
+                  lineHeight="shorter"
+                  fontWeight="bold"
+                  fontFamily="heading"
+                >
+                  Select Tokens.
+                </Heading>
+              </Flex>
+              <Stack ml={4} spacing={2} mt={4} mr={4}>
+                <Stack
+                  justifyContent="flex-start"
+                  alignItems="flex-start"
+                  spacing={2}
+                >
+                  <Heading>
+                    {`For ${paymentHub.state$._value.network.name} network.`}
+                  </Heading>
+                  <Text fontSize="md" color="gray.600">
+                    Input the token contract address on this network.
+                    <p>For example, the SLV token contract address is</p>
+                  </Text>
+                  <Box
+                    width="450px"
+                    display="block"
+                    flexDirection="column"
+                    alignItems="flex-start"
+                    justifyContent="flex-start"
+                    backgroundColor="gray.100"
+                    borderRadius="lg"
+                    p={3}
+                    minHeight="60px"
+                  >
+                    0x7F57f0bde95d963E149F96E1d0D64b89BFf1926b
+                  </Box>
+                </Stack>
+                <Stack spacing={2}>
+                  <Input
+                    placeholder={`To paste your tokens contract address for ${paymentHub.state$._value.network.name} network here`}
+                  />
                 </Stack>
                 <Button
                   onClick={async () => {
                     await createClaimTx();
                   }}
                 >
-                  Claim
+                  Next Step
                 </Button>
               </Stack>
             </Box>
@@ -391,7 +480,7 @@ const App = () => {
                   fontWeight="bold"
                   fontFamily="heading"
                 >
-                  Under developerment.
+                  Top up and Send.
                 </Heading>
               </Flex>
               <Stack ml={4} spacing={2} mt={4} mr={4}>
@@ -407,12 +496,14 @@ const App = () => {
                     borderRadius="sm"
                     fontSize="sm"
                   >
-                    Drag and Drop!
+                    Minimum required amount 303.0 SLV Including 1% commission
+                    3.0 SLV Recipient pays commission 0 SLV Top up hub Copy
+                    claim link:
+                    https://app.airdropme.io/claim/0x5aA92922F6b53B6193a60F98AA200364f8a6CeA5
                   </Tag>
                   <Text fontSize="md" color="gray.600">
-                    Drag any component from the left hand panel into this
-                    editor. Then start interacting with them: try to drop the
-                    Avatar component in this box…
+                    Send minimum required amount of tokens to your hub created
+                    at step 2. Available balance
                   </Text>
                   <Box
                     width="200px"
@@ -428,18 +519,20 @@ const App = () => {
                 </Stack>
                 <Stack spacing={2}>
                   <Tag size="md" variant="subtle" colorScheme="whatsapp">
-                    Make sure you have enough funds in the Payment Hub address.
+                    Send minimum required amount of tokens to your hub created
+                    at step 2.
                   </Tag>
                   <Text color="gray.600">
-                    then, provide an client address to claim 1 tokens.
+                    Make sure you have enough tokens in the hub address, then
+                    press Start.
                   </Text>
                 </Stack>
                 <Button
                   onClick={async () => {
-                    await createClaimTx();
+                    await createSend();
                   }}
                 >
-                  Claim
+                  Start
                 </Button>
               </Stack>
             </Box>
