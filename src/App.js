@@ -56,6 +56,8 @@ const App = () => {
   });
   const [step2, setStep2] = useState(false);
   const [step3, setStep3] = useState(false);
+  const [step4, setStep4] = useState(false);
+  const [step5, setStep5] = useState(false);
   async function connect() {
     if (!MetaMaskWalletProvider.detect()) {
       console.log("MetaMask not detected");
@@ -72,7 +74,7 @@ const App = () => {
         truncateEthAddress(state$._value.account.address)
     );
     console.info("SDK created", state$);
-    console.log(NetworkNames.Mumbai);
+    console.log("on network: ", state$._value.network.name);
   }
 
   async function createWallet() {
@@ -82,7 +84,7 @@ const App = () => {
       networkName: sdk.state$._value.network.name,
     });
     setStep2(false);
-    console.log(paymentHub.state$);
+    console.log("paymentHub.state$", paymentHub.state$);
   }
 
   async function createHub() {
@@ -269,14 +271,101 @@ const App = () => {
                   <Alert variant="left-accent" status="success">
                     <AlertIcon />
                     <AlertTitle mr={1}>Alert!</AlertTitle>
-                    <AlertDescription>Copy hub P2P address</AlertDescription>
+                    <AlertDescription>
+                      Hub is used to distribute tokens among recipients. Copy
+                      above hub P2P address
+                    </AlertDescription>
                   </Alert>
                 </Stack>
               </Stack>
+              <Checkbox
+                isChecked={step3}
+                onChange={(e) => setStep3(e.target.checked)}
+              >
+                I have copyed the hub P2P address. Proceed to next step.
+              </Checkbox>
             </Box>
           </Stack>
         )}
         {step3 && (
+          <Stack>
+            <Box
+              backgroundColor="white"
+              boxShadow="sm"
+              borderRadius="lg"
+              pl={3}
+              pr={3}
+              pt={5}
+              pb={5}
+            >
+              <Flex
+                display="flex"
+                flexDirection="row"
+                alignItems="center"
+                justifyContent="flex-start"
+                pb={2}
+              >
+                <ChevronLeftIcon />
+                <Heading
+                  size="md"
+                  as="h2"
+                  lineHeight="shorter"
+                  fontWeight="bold"
+                  fontFamily="heading"
+                >
+                  Select recipients.
+                </Heading>
+              </Flex>
+              <Stack ml={4} spacing={2} mt={4} mr={4}>
+                <Stack
+                  justifyContent="flex-start"
+                  alignItems="flex-start"
+                  spacing={2}
+                >
+                  <Tag
+                    size="md"
+                    variant="subtle"
+                    colorScheme="whatsapp"
+                    borderRadius="sm"
+                    fontSize="sm"
+                  >
+                    Upload CSV
+                  </Tag>
+                  <Text fontSize="md" color="gray.600">
+                    Example 500 addresses max in a .csv file
+                  </Text>
+                  <Box
+                    width="200px"
+                    display="block"
+                    flexDirection="column"
+                    alignItems="flex-start"
+                    justifyContent="flex-start"
+                    backgroundColor="gray.100"
+                    borderRadius="lg"
+                    p={3}
+                    minHeight="60px"
+                  />
+                </Stack>
+                <Stack spacing={2}>
+                  <Tag size="md" variant="subtle" colorScheme="whatsapp">
+                    Make sure you have enough funds in the Payment Hub address.
+                  </Tag>
+                  <Text color="gray.600">
+                    then, provide an client address to claim 1 tokens.
+                  </Text>
+                </Stack>
+                <Button
+                  onClick={async () => {
+                    await createClaimTx();
+                  }}
+                >
+                  Claim
+                </Button>
+              </Stack>
+            </Box>
+          </Stack>
+        )}
+        {step4 && (
           <Stack>
             <Box
               backgroundColor="white"
