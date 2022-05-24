@@ -56,7 +56,7 @@ export default class UploadCSV extends React.Component {
     formData.append("otherData", "canBeAnythingYouWant");
     console.log("this.state.file", this.state.file);
     console.log("formData", formData);
-    fetch("http://localhost:1337/api/upload", {
+    fetch("https://api.muzamint.com/api/upload", {
       method: "POST",
       body: formData,
     })
