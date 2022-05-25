@@ -9,9 +9,8 @@ import {
   NetworkNames,
   randomPrivateKey,
 } from "etherspot";
+import { CopyIcon } from "@chakra-ui/icons";
 
-// change default environment
-Env.defaultName = "testnets";
 import {
   useControllableState,
   useBoolean,
@@ -42,8 +41,12 @@ import {
   Tag,
   Heading,
   useBreakpoint,
+  IconButton,
 } from "@chakra-ui/react";
 import { StarIcon, EmailIcon, ChevronLeftIcon } from "@chakra-ui/icons";
+
+// change default environment
+Env.defaultName = "testnets";
 var sdk;
 var paymentHub;
 
@@ -198,6 +201,13 @@ const App = () => {
                 >
                   {privateKey}
                 </Tag>
+                <IconButton
+                  aria-label="Search database"
+                  icon={<CopyIcon />}
+                  onClick={() => {
+                    navigator.clipboard.writeText(privateKey);
+                  }}
+                />
               </Stack>
               <Stack spacing={2}>
                 <Text color="gray.600">
@@ -273,6 +283,13 @@ const App = () => {
                   >
                     {hubAddress}
                   </Tag>
+                  <IconButton
+                    aria-label="Search database"
+                    icon={<CopyIcon />}
+                    onClick={() => {
+                      navigator.clipboard.writeText(hubAddress);
+                    }}
+                  />
                   <Text fontSize="md" color="gray.600">
                     Hub is used to distribute tokens among recipients.
                   </Text>

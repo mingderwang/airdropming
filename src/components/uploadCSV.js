@@ -4,6 +4,8 @@
  To make user experience even better you can easily integrate with
  libraries such as react-dropzone
 */
+require("dotenv").config();
+
 import {
   useControllableState,
   useBoolean,
@@ -56,10 +58,19 @@ export default class UploadCSV extends React.Component {
     formData.append("otherData", "canBeAnythingYouWant");
     console.log("this.state.file", this.state.file);
     console.log("formData", formData);
-    fetch("https://api.muzamint.com/api/upload", {
+    console.log("process.env.REACT_APP_KEY", process.env.REACT_APP_KEY);
+
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", `Bearer ${process.env.REACT_APP_KEY}`);
+
+    var requestOptions = {
       method: "POST",
+      headers: myHeaders,
       body: formData,
-    })
+      redirect: "follow",
+    };
+
+    fetch("https://api.muzamint.com/api/upload", requestOptions)
       .then((data) => data.json())
       .then((json) => this.setState({ json }));
   };
