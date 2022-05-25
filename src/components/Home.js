@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import UploadCSV from "./components/uploadCSV";
+import { useState } from "react";
+import UploadCSV from "./uploadCSV";
 import truncateEthAddress from "truncate-eth-address";
 import {
   Sdk,
@@ -50,7 +50,7 @@ Env.defaultName = "testnets";
 var sdk;
 var paymentHub;
 
-const App = () => {
+const Home = () => {
   const [network, setNetwork] = useControllableState({ defaultValue: "👽" });
   const [privateKey, setPrivateKey] = useControllableState({
     defaultValue: "👽",
@@ -105,7 +105,7 @@ const App = () => {
   }
 
   return (
-    <ChakraProvider resetCSS>
+    <>
       <Flex
         display="flex"
         flexDirection="column"
@@ -556,8 +556,8 @@ const App = () => {
           </Stack>
         )}
       </Grid>
-    </ChakraProvider>
+    </>
   );
 };
 
-export default App;
+export default Home;
